@@ -31,9 +31,9 @@ Routine[] enabledRoutines = new Routine[] {
   new RainbowColors(), 
   new Warp(null, true, false, 0.5, 0.5), 
   new Warp(new WarpSpeedMrSulu(), false, true, 0.5, 0.5), 
-  new Waves(),
-  new Animator("anim-nyancat",1,.5,0,0,0),
-  new Greetz(),
+  new Waves(), 
+  new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
+  new Greetz(), 
   //new FFTDemo(),
 };
 
@@ -62,14 +62,14 @@ void setup() {
   frameRate(FRAMERATE);
 
   sign = new LEDDisplay(this, displayWidth, displayHeight, true, transmit_address, transmit_port);
-  sign.setAddressingMode(LEDDisplay.ADDRESSING_HORIZONTAL_NORMAL);  
+  sign.setAddressingMode(LEDDisplay.ADDRESSING_HORIZONTAL_NORMAL);
   sign.setEnableGammaCorrection(true);
 
-  setMode(0);  
+  setMode(0);
 
   for (Routine r : enabledRoutines) {
     r.setup(this);
-  }  
+  }
 
   drop.setup(this);
 }

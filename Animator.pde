@@ -41,7 +41,7 @@ class Animator extends Routine {
     float yNominal = (frame*m_yVelocity + m_yOffset)%height;
 
     image(anim.update(), xNominal, yNominal);
-    image(anim.update(), xNominal - width, yNominal);    
+    image(anim.update(), xNominal - width, yNominal);
     image(anim.update(), xNominal - width, yNominal - height);
     image(anim.update(), xNominal, yNominal - height);
 
@@ -81,7 +81,7 @@ class Animation {
 
   void load(String name) {
     int filesCounter=0;
-    File dataFolder = new File(sketchPath, "data/"+name); 
+    File dataFolder = new File(sketchPath, "data/"+name);
     String[] allFiles = dataFolder.list();
     try {
       for (int j=0;j<allFiles.length;j++) {
@@ -127,10 +127,9 @@ class Animation {
           }
         }
       }
-    }  
+    }
     canvas.updatePixels();
-    canvas.endDraw(); 
+    canvas.endDraw();
     return canvas;
   }
 }
-

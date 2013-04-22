@@ -4,11 +4,11 @@ class Greetz extends Routine {
   PImage imgCopy;
   String messages[] = new String[] {
     "CRASH Space", 
-    //"N Y C R", 
+    //"N Y C R",
     //"KOSTUME  KULT",
     //"BLACK  LIGHT  BALL"
     //"COUNTRY  CLUB",
-  };  
+  };
   String message = "CRASH Space";
 
   void setup(PApplet parent) {
@@ -44,7 +44,7 @@ class Greetz extends Routine {
     }
 
     if (x<w) {
-      x = displayHeight;  
+      x = displayHeight;
       message = messages[int(random(messages.length))];
       w = 0;
       newMode();
