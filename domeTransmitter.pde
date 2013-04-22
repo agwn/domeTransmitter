@@ -9,33 +9,32 @@ int transmit_port       = 58082;
 
 
 // Display configuration
-int displayWidth = 40;
-int displayHeight = 160;
+int displayWidth = 32;
+int displayHeight = 80;
 
 boolean VERTICAL = false;
-int FRAMERATE = 25;
+int FRAMERATE = 10;
 int TYPICAL_MODE_TIME = 300;
 
 float bright = 1;  // Global brightness modifier
 
 Routine drop = new Seizure();
-Routine pong = new Pong();
 Routine backupRoutine = null;
 
 Routine[] enabledRoutines = new Routine[] {
-  new Animator("anim-nyancat",1,.5,0,0,0),
   new Bursts(), 
-  //  new Chase(),
+  new Chase(), 
   new ColorDrop(), 
-  //  new DropTheBomb(),
-  new FFTDemo(), 
-  //  new Fire(),
-  //  new Greetz(),
+  new DropTheBomb(), 
+  new Fire(), 
   new RGBRoutine(), 
   new RainbowColors(), 
   new Warp(null, true, false, 0.5, 0.5), 
   new Warp(new WarpSpeedMrSulu(), false, true, 0.5, 0.5), 
   new Waves(),
+  new Animator("anim-nyancat",1,.5,0,0,0),
+  new Greetz(),
+  //new FFTDemo(),
 };
 
 int w = 0;
@@ -57,10 +56,8 @@ PGraphics fadeLayer;
 int fadeOutFrames = 0;
 int fadeInFrames = 0;
 
-WiiController controller;
-
 void setup() {
-  size(displayWidth, displayHeight);
+  size(displayWidth, displayHeight, P2D);
 
   frameRate(FRAMERATE);
 
@@ -69,8 +66,6 @@ void setup() {
   sign.setEnableGammaCorrection(true);
 
   setMode(0);  
-
-  controller = new WiiController();
 
   for (Routine r : enabledRoutines) {
     r.setup(this);
@@ -106,7 +101,27 @@ void newMode() {
   setFadeLayer(240);
   if (enabledRoutines.length > 1) {
     while (newMode == mode) {
-      newMode = int(random(enabledRoutines.length));
+      newMode = int((mode+1)%enabledRoutines.length);
+    }
+  }
+
+  setMode(newMode);
+}
+
+void newMode(int mode) {
+  int newMode = mode;
+  String methodName;
+
+  fadeOutFrames = FRAMERATE;
+  setFadeLayer(240);
+  if ((mode >= 0) && (mode < enabledRoutines.length)) {
+    newMode = mode;
+  }
+  else {
+    if (enabledRoutines.length > 1) {
+      while (newMode == mode) {
+        newMode = int((mode+1)%enabledRoutines.length);
+      }
     }
   }
 
@@ -114,38 +129,31 @@ void newMode() {
 }
 
 boolean switching_mode = false; // if true, we already switched modes, so don't do it again this frame (don't freeze the display if someone holds the b button)
-int seizure_count = 0;  // Only let seizure mode work for a short time.
+int seizure_count = 10;  // Only let seizure mode work for a short time.
 
 void draw() {
-  if (!controller.buttonB) {
-    switching_mode = false;
-  }
 
-  if (controller.buttonA) {
-    seizure_count += 1;
-  }
-  else {
-    seizure_count = 0;
-  }
-
-
+  // should test if mode switch is actually done
+  switching_mode = false;
+  /*
   // Jump into seizure mode
-  if ((controller.buttonA || (keyPressed && key == 'a')) && currentRoutine != drop && seizure_count == 1) {
-    //drop.draw();
-    backupRoutine = currentRoutine;
-    currentRoutine = drop;
-    drop.reset();
-  }
-  // Drop out of seizure mode
-  else if (!controller.buttonA && currentRoutine == drop) {
-    currentRoutine = backupRoutine;
-  }
-  else if (seizure_count > 10 && currentRoutine == drop) {
-    currentRoutine = backupRoutine;
-  }
-  else if ((controller.buttonB || (keyPressed && key == 'c')) && !switching_mode) {
+   if ((keyPressed && key == 'a') && currentRoutine != drop && seizure_count == 1) {
+   drop.draw();
+   backupRoutine = currentRoutine;
+   currentRoutine = drop;
+   drop.reset();
+   }
+   else*/
+  if ((keyPressed && key == 'c') && !switching_mode) {
     newMode();
     switching_mode = true;
+  }
+  else if ((keyPressed && '0' <= key && key <='9' ) && !switching_mode) {
+    if (mode != (key-'0')) {
+      mode = key-'0';
+      newMode(mode);
+      switching_mode = true;
+    } // else already in that mode
   }
   else {
     if (fadeOutFrames > 0) {

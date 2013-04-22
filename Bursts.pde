@@ -1,5 +1,5 @@
 class Bursts extends Routine {
-  int NUMBER_OF_BURSTS = 16;
+  int NUMBER_OF_BURSTS = 8;
   Burst[] bursts;
 
   void setup(PApplet parent) {
@@ -12,17 +12,17 @@ class Bursts extends Routine {
 
   void reset() {
   }
-  
+
   void draw()
   {
-      background(0,0,20);
-  
+    background(0, 0, 20);
+
     for (int i=0; i<NUMBER_OF_BURSTS; i++) {
       bursts[i].draw();
     }
-  
+
     if (frameCount - modeFrameStart > FRAMERATE*TYPICAL_MODE_TIME) {
-      newMode();
+      newMode(-1);
     }
   }
 }
@@ -37,7 +37,7 @@ class Burst {
   float maxd;
   float speed;
   int intensity;
-  
+
   float r;
   float g;
   float b;
@@ -49,20 +49,20 @@ class Burst {
 
   public void reset()
   {
-    r = random(128)+128;
-    g = random(128)+128;
-    b = random(128)+128;
+    r = random(128)+32;
+    g = random(128)+32;
+    b = random(128)+32;
     //r = random(128);
     //g = random(118);
     //b = random(128);
-   
+
     x = random(displayWidth);
     y = random(displayHeight);
 
-    float max_speed = 2;
+    float max_speed = 1;
     xv = random(max_speed) - max_speed/2;
     yv = random(max_speed) - max_speed/2;
-    
+
     maxd = random(6);
     speed = random(5)/10 + 0.4;
     d = 0;
@@ -73,10 +73,10 @@ class Burst {
   {
     reset();
   }
-  
+
   public void draw_ellipse(float x, float y, float widt, float heigh, color c) {
-    while(widt > 1 && heigh > 1) {
-      float target_brightness = random(.8,1.5);
+    while (widt > 1 && heigh > 1) {
+      float target_brightness = random(.8, 1.5);
       c = color(red(c)*target_brightness, green(c)*target_brightness, blue(c)*target_brightness);
       fill(c);
       stroke(c);
@@ -85,14 +85,14 @@ class Burst {
       heigh -= 1;
     }
   }
-  
+
   public void draw()
   {    
     // Draw multiple elipses, to handle wrapping in the y direction.
-    draw_ellipse(x, y,       d*(.5-.3*y/displayHeight), d*3, color(r,g,b));
-    draw_ellipse(x-displayWidth, y, d*(.5-.3*y/displayHeight), d*3, color(r,g,b));
-    draw_ellipse(x+displayWidth, y, d*(.5-.3*y/displayHeight), d*3, color(r,g,b));
-    
+    draw_ellipse(x, y, d*(.5-.3*y/displayHeight), d*3, color(r, g, b));
+    draw_ellipse(x-displayWidth, y, d*(.5-.3*y/displayHeight), d*3, color(r, g, b));
+    draw_ellipse(x+displayWidth, y, d*(.5-.3*y/displayHeight), d*3, color(r, g, b));
+
     d+= speed;
     if (d > maxd) {
       // day
@@ -101,12 +101,12 @@ class Burst {
       b -= 2;
       intensity -= 15;
       //night
-//      r -= 1;
-//      g -= 1;
-//      b -= 1;
-//      intensity -= 3;
+      //      r -= 1;
+      //      g -= 1;
+      //      b -= 1;
+      //      intensity -= 3;
     }
-    
+
     // add speed, try to scale slower at the bottom...
     x +=xv*(displayHeight - y/3)/displayHeight;
     y +=yv*(displayHeight - y/3)/displayHeight;
@@ -114,7 +114,7 @@ class Burst {
     if (intensity <= 0) {
       reset();
     }
-   
+
     long frame = frameCount - modeFrameStart;
     if (frame > FRAMERATE*TYPICAL_MODE_TIME) {
       newMode();
