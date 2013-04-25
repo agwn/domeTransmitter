@@ -47,24 +47,24 @@ class Fire extends Routine {
       calc2[y] = (y + 1) % displayHeight;
       calc5[y] = (y + 2) % displayHeight;
     }
-
+    
     colorMode(RGB);
   }
 
   void draw() {
     angle = angle + 0.05;
 
-    //    // Rotating wireframe cube
-    //    pg.beginDraw();
-    //    pg.translate(displayWidth >> 1, displayHeight >> 1);
-    //    pg.rotateX(sin(angle/2));
-    //    pg.rotateY(cos(angle/2));
-    //    pg.background(0);
-    //    pg.stroke(128);
-    //    pg.scale(25);
-    //    pg.noFill();
-    //    pg.box(4);
-    //    pg.endDraw();
+//    // Rotating wireframe cube
+//    pg.beginDraw();
+//    pg.translate(displayWidth >> 1, displayHeight >> 1);
+//    pg.rotateX(sin(angle/2));
+//    pg.rotateY(cos(angle/2));
+//    pg.background(0);
+//    pg.stroke(128);
+//    pg.scale(25);
+//    pg.noFill();
+//    pg.box(4);
+//    pg.endDraw();
 
     // Randomize the bottom row of the fire buffer
     for (int x = 0; x < displayWidth; x++)
@@ -89,7 +89,7 @@ class Fire extends Routine {
         // Output everything to screen using our palette colors
         pixels[counter] = palette[fire[x][y]];
 
-        // Extract the red value using right shift and bit mask
+        // Extract the red value using right shift and bit mask 
         // equivalent of red(pg.pixels[x+y*w])
         if ((pg.pixels[counter++] >> 16 & 0xFF) == 128) {
           // Only map 3D cube 'lit' pixels onto fire array needed for next frame

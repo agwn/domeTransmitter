@@ -1,6 +1,6 @@
 class Waves extends Routine {
 
-  int NUMBER_OF_WAVES = 4;
+  int NUMBER_OF_WAVES = 10;
   Wave[] waves;
 
   void setup(PApplet parent) {
@@ -52,8 +52,8 @@ class Wave {
   public void init() {
     r = random(TWO_PI);
     f = 2*PI/40;
-    a = displayHeight/6 + random(displayHeight/4);
-    y = displayHeight/16 + int(random(displayHeight - displayHeight/16));
+    a = displayWidth/6 + random(displayWidth/4);
+    y = displayWidth/16 + int(random(displayWidth - displayWidth/16));
     s = PI/128 + random(PI/16);
 
     if (random(10)<5) {
@@ -61,16 +61,17 @@ class Wave {
     }
 
     c = color(random(255), random(255), random(255));
+    /*
     // naim hack (PORNJ Pink: RGB 252/23/218)
-    //    if(random(0,2) > 1) {
-    //      // pink
-    //      c = color(int(random(220,255)), int(random(0,55)), int(random(210,230)));
-    //    }
-    //    else {
-    //      // orange
-    //      c = color(int(random(230,255)), int(random(160,180)), int(random(0,1)));
-    //    }
-    //    //c = color(int(random(255)), int(random(255)), int(random(255)));
+    if (random(0, 2) > 1) {
+      // pink
+      c = color(int(random(220, 255)), int(random(0, 55)), int(random(210, 230)));
+    }
+    else {
+      // orange
+      c = color(int(random(230, 255)), int(random(160, 180)), int(random(0, 1)));
+    }
+    */
   }
 
   public void draw() {
@@ -89,10 +90,10 @@ class Wave {
 
     g.stroke(color(red(c)*bright_mult, green(c)*bright_mult, blue(c)*bright_mult));
 
-    for (int x=0; x<displayWidth; x++) {
+    for (int x=0; x<displayHeight; x++) {
       h = sin(step) * a;
       step = step + f;
-      g.line(x, y+h*.1, x, y+h*random(1, 1.2));
+      g.line(y+h*.1, x, y+h*random(1, 1.2), x);
     }
 
     g.endDraw();

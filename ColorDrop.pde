@@ -5,37 +5,37 @@ class ColorDrop extends Routine {
     float frame_mult = 3;  // speed adjustment
 
     // lets add some jitter
-    modeFrameStart = modeFrameStart - min(0, int(random(-5, 12)));
+    modeFrameStart = modeFrameStart - min(0, int(random(-3, 6)));
 
     long frame = frameCount - modeFrameStart;
 
 
-    for (int row = 0; row < displayHeight; row++) {
-      float phase = sin((float)((row+frame*frame_mult)%displayHeight)/displayHeight*3.146 + random(0, .6));
+    for (int col = 0; col < displayWidth; col++) {
+      float phase = sin((float)((col+frame*frame_mult)%displayWidth)/displayWidth*3.146 + random(0, .01));
 
       float r = 0;
       float g = 0;
       float b = 0;
 
 
-      if ((row+frame*frame_mult)%(3*displayHeight) < displayHeight) {
-        r = 255*phase;
-        g = 0;
-        b = 0;
+      if ((col+frame*frame_mult)%(3*displayWidth) < displayWidth) {
+        r = random(255)*phase;
+        g = random(128);
+        b = random(128);
       }
-      else if ((row+frame*frame_mult)%(3*displayHeight) < displayHeight*2) {
-        r = 0;
-        g = 255*phase;
-        b = 0;
+      else if ((col+frame*frame_mult)%(3*displayWidth) < displayWidth*2) {
+        r = random(128);
+        g = random(255)*phase;
+        b = random(128);
       }
       else {
-        r = 0;
-        g = 0;
-        b = 255*phase;
+        r = random(128);
+        g = random(128);
+        b = random(255)*phase;
       }
 
       stroke(r, g, b);
-      line(0, row, displayWidth, row);
+      line(col, 0, col, displayHeight);
     }
 
     if (frame > FRAMERATE*TYPICAL_MODE_TIME) {

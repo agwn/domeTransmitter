@@ -9,31 +9,36 @@ int transmit_port       = 58082;
 
 
 // Display configuration
-int displayWidth = 32;
-int displayHeight = 80;
+int displayWidth = 60;
+int displayHeight = 32;
 
 boolean VERTICAL = false;
-int FRAMERATE = 10;
-int TYPICAL_MODE_TIME = 300;
+int FRAMERATE = 15;
+int TYPICAL_MODE_TIME = 6000;
 
-float bright = 1;  // Global brightness modifier
+float bright = 0.5;  // Global brightness modifier
 
 Routine drop = new Seizure();
 Routine backupRoutine = null;
 
+//WiiController controller;
+
 Routine[] enabledRoutines = new Routine[] {
-  new Bursts(), 
-  new Chase(), 
-  new ColorDrop(), 
-  new DropTheBomb(), 
-  new Fire(), 
-  new RGBRoutine(), 
-  new RainbowColors(), 
+  new WarpSpeedMrSulu(), 
+  new Warp(new WarpSpeedMrSulu(), false, false, 0.5, 0.5), 
+  //new RGBRoutine(), 
+  new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
+  //new RainbowColors(), 
+  new Warp(new RainbowColors(), true, true, 0.5, 0.5), 
   new Warp(null, true, false, 0.5, 0.5), 
-  new Warp(new WarpSpeedMrSulu(), false, true, 0.5, 0.5), 
   new Waves(), 
-  new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
-  new Greetz(), 
+  //denew DropTheBomb(), 
+  //new Fire(), 
+  new ColorDrop(), 
+  //new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
+  new Bursts(), 
+  //new Greetz(), 
+  //new Chase(), 
   //new FFTDemo(),
 };
 
@@ -66,6 +71,8 @@ void setup() {
   sign.setEnableGammaCorrection(true);
 
   setMode(0);
+
+  //controller = new WiiController();
 
   for (Routine r : enabledRoutines) {
     r.setup(this);
@@ -133,22 +140,32 @@ int seizure_count = 10;  // Only let seizure mode work for a short time.
 
 void draw() {
 
-  // should test if mode switch is actually done
+  //if (!controller.buttonB) {
+  // should test if mode switch is actually done?
   switching_mode = false;
+  //}
+
   /*
-  // Jump into seizure mode
-   if ((keyPressed && key == 'a') && currentRoutine != drop && seizure_count == 1) {
+  if (controller.buttonA) {
+   seizure_count += 1;
+   }
+   else {
+   seizure_count = 0;
+   }
+   
+   // Jump into seizure mode
+   if ((controller.buttonA || (keyPressed && key == 'a')) && currentRoutine != drop && seizure_count == 1) {
    drop.draw();
    backupRoutine = currentRoutine;
    currentRoutine = drop;
    drop.reset();
    }
-   else*/
+   else */
   if ((keyPressed && key == 'c') && !switching_mode) {
     newMode();
     switching_mode = true;
   }
-  else if ((keyPressed && '0' <= key && key <='9' ) && !switching_mode) {
+  else if ((keyPressed && '0' <= key && key <='9') && ((key - '0') < enabledRoutines.length)  && !switching_mode) {
     if (mode != (key-'0')) {
       mode = key-'0';
       newMode(mode);
@@ -179,7 +196,7 @@ void draw() {
 
     if (currentRoutine.isDone) {
       currentRoutine.isDone = false;
-      newMode();
+      //newMode();
     }
   }
 

@@ -22,9 +22,9 @@ class DropTheBomb extends Routine {
   }
 
   void draw() {
-    if (bombY < displayHeight) {
+    if (bombX > 0) {
       drawBomb();
-      bombY += bombSpeed;
+      bombX -= bombSpeed;
     }
     else if (flashBrightness > 0) {
       drawFlash();
@@ -45,7 +45,7 @@ class DropTheBomb extends Routine {
 
     for (int i=0; i<5; i++) {
       stroke(c);
-      point(bombX, bombY-i);
+      point(bombX-i, bombY);
       c = c - 32;
     }
   }
@@ -63,7 +63,7 @@ class DropTheBomb extends Routine {
     for (int i=0; i<5; i++) {
       fill(255-(i*16), 64-(i*4), 32-(i*2));
       ellipseMode(CENTER);
-      rect(0, displayHeight, displayWidth*2, blastRadius/(i+1));
+      rect(0, displayHeight, blastRadius/(i+1), displayHeight*2);
     }
   }
 }

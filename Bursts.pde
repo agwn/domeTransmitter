@@ -22,7 +22,7 @@ class Bursts extends Routine {
     }
 
     if (frameCount - modeFrameStart > FRAMERATE*TYPICAL_MODE_TIME) {
-      newMode(-1);
+      newMode();
     }
   }
 }
@@ -49,24 +49,24 @@ class Burst {
 
   public void reset()
   {
-    r = random(128)+32;
-    g = random(128)+32;
-    b = random(128)+32;
-    //r = random(128);
-    //g = random(118);
-    //b = random(128);
+    r = random(255-32)+32;
+    g = random(255-32)+32;
+    b = random(255-32)+32;
+    //r = random(255);
+    //g = random(255);
+    //b = random(255);
 
     x = random(displayWidth);
     y = random(displayHeight);
 
-    float max_speed = 1;
+    float max_speed = .25;
     xv = random(max_speed) - max_speed/2;
     yv = random(max_speed) - max_speed/2;
 
-    maxd = random(6);
-    speed = random(5)/10 + 0.4;
+    maxd = random(20);
+    speed = random(5)/10 + 0.1;
     d = 0;
-    intensity = 255;
+    intensity = int(random(255));
   }
 
   public void init()
@@ -76,7 +76,7 @@ class Burst {
 
   public void draw_ellipse(float x, float y, float widt, float heigh, color c) {
     while (widt > 1 && heigh > 1) {
-      float target_brightness = random(.8, 1.5);
+      float target_brightness = random(.95, 1.05);
       c = color(red(c)*target_brightness, green(c)*target_brightness, blue(c)*target_brightness);
       fill(c);
       stroke(c);
@@ -94,24 +94,27 @@ class Burst {
     draw_ellipse(x+displayWidth, y, d*(.5-.3*y/displayHeight), d*3, color(r, g, b));
 
     d+= speed;
+
     if (d > maxd) {
+      d -= speed/3;
+      
       // day
-      r -= 2;
-      g -= 2;
-      b -= 2;
-      intensity -= 15;
+      //r -= 2;
+      //g -= 2;
+      //b -= 2;
+      //intensity -= 15;
       //night
-      //      r -= 1;
-      //      g -= 1;
-      //      b -= 1;
-      //      intensity -= 3;
+      //r -= 1;
+      //g -= 1;
+      //b -= 1;
+      intensity -= 4;
     }
 
     // add speed, try to scale slower at the bottom...
     x +=xv*(displayHeight - y/3)/displayHeight;
     y +=yv*(displayHeight - y/3)/displayHeight;
 
-    if (intensity <= 0) {
+    if ((intensity <= 0) || (false)) {
       reset();
     }
 
