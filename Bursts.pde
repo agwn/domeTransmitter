@@ -49,12 +49,15 @@ class Burst {
 
   public void reset()
   {
-    r = random(255-32)+32;
-    g = random(255-32)+32;
-    b = random(255-32)+32;
+    //r = random(255-32)+32;
+    //g = random(255-32)+32;
+    //b = random(255-32)+32;
     //r = random(255);
     //g = random(255);
     //b = random(255);
+    r = random(rMin, rMax);
+    g = random(gMin, gMax);
+    b = random(bMin, bMax);
 
     x = random(displayWidth);
     y = random(displayHeight);
@@ -97,7 +100,7 @@ class Burst {
 
     if (d > maxd) {
       d -= speed/3;
-      
+
       // day
       //r -= 2;
       //g -= 2;

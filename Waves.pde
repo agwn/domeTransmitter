@@ -60,7 +60,7 @@ class Wave {
       s = -s;
     }
 
-    c = color(random(255), random(255), random(255));
+    c = color(random(rMin,rMax), random(gMin,gMax), random(bMin,bMax));
     /*
     // naim hack (PORNJ Pink: RGB 252/23/218)
     if (random(0, 2) > 1) {

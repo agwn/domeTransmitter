@@ -2,8 +2,8 @@ class RainbowColors extends Routine {
   void draw() {
     long frame = frameCount - modeFrameStart;
 
-    //  print(mouseY*255.0/displayHeight);
-    //  print(" ");
+    //print(mouseY*255.0/displayHeight);
+    //print(" ");
 
     colorMode(HSB, 100);
 

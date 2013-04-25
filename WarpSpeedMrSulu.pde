@@ -45,15 +45,18 @@ class WarpStar {
   public void reset() {
 
     //RGB 252/23/218
-    //r = int(map(y, 0, displayHeight, 0, 255));
-    //g = 0;
-    //b = 0;
     //r = 252;
     //g = 23;
     //b = 218;
-    r = random(64, 255);
-    g = random(64, 255);
-    b = random(64, 255);
+    //r = int(map(y, 0, displayHeight, 0, 255));
+    //g = 0;
+    //b = 0;
+    //r = random(64, 255);
+    //g = random(64, 255);
+    //b = random(64, 255);
+    r = random(rMin, rMax);
+    g = random(gMin, gMax);
+    b = random(bMin, bMax);
     // scale brightness.
     float bright = random(.5, 2);
     r = r*bright;
@@ -83,17 +86,17 @@ class WarpStar {
 //      len = int(abs(vx)+1 * 10);
 //    }
 
-    print("vy: ");
-    print(vy);
-    print(" len: ");
-    print(len);
+//    print("vy: ");
+//    print(vy);
+//    print(" len: ");
+//    print(len);
 
     dx = int(random(2*displayWidth, 10*displayWidth));
     dy = int(random(2*displayHeight, 5*displayHeight));
-    print(" dx: ");
-    print(dx);
-    print(" dy: ");
-    println(dy);
+//    print(" dx: ");
+//    print(dx);
+//    print(" dy: ");
+//    println(dy);
   }
 
   public void draw() {
