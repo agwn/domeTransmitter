@@ -1,5 +1,5 @@
 class WarpSpeedMrSulu extends Routine {
-  int NUM_STARS = 100;
+  int NUM_STARS = 50;
   WarpStar[] warpstars;
 
   void setup(PApplet parent) {
@@ -51,12 +51,16 @@ class WarpStar {
     //r = int(map(y, 0, displayHeight, 0, 255));
     //g = 0;
     //b = 0;
-    //r = random(64, 255);
-    //g = random(64, 255);
-    //b = random(64, 255);
-    r = random(varMin[0], varMax[0]);
-    g = random(varMin[1], varMax[1]);
-    b = random(varMin[2], varMax[2]);
+    r = random(varMax[0]);
+    g = random(varMax[1]);
+    b = random(varMax[2]);
+
+    // select color from hsv color space
+    //float tm = random(map(varMin[0],0,255,0,TWO_PI),map(varMax[0],0,255,0,TWO_PI));
+    //r = 128*(sin(tm)/2+1);
+    //g = 128*(sin(tm+TWO_PI/3)/2+1);
+    //b = 128*(sin(tm+2*TWO_PI/3)/2+1);
+
     // scale brightness.
     float bright = random(.5, 2);
     r = r*bright;
@@ -65,38 +69,35 @@ class WarpStar {
 
     y = int(random(0, displayHeight));
 
-    if (random(0, 1) > 0.80) {
+    //float typeThresh = map((varMin[1]+varMax[1])/2.0, 0, 255, 0, 1);
+    //float vdir = map ((varMin[2]+varMax[2])/2.0, 0, 255, -2, 2);
+
+    if (random(0, 1) > 0.4/*typeThresh*/) {
       x = int(random(0, displayWidth));
       vx = (random(0, 1)-0.5)*1.5;
       vy = 0;
-      len = int(abs(vx)+1 * 10);
+      len = int((abs(vx)+1) * 10);
     }
     else {
       x = int(random(0, displayWidth));
       vx = 0;
-      vy = (random(0, 1)-0.40)*1.5;
-      len = int(abs(vy)+1 * 10);
+      vy = (random(0, 1)-0.5/*vdir*/)*1.5;
+      len = int((abs(vy)+1) * 10);
     }
 
-//    // override values for testing
-//    if (true) {
-//      x = int(random(0, displayWidth));
-//      vx = (random(0, 1)-0.5)*1.5;
-//      vy = (random(0, 1)-0.45)*1.5;
-//      len = int(abs(vx)+1 * 10);
-//    }
+    //    // override values for testing
+    //    if (true) {
+    //      x = int(random(0, displayWidth));
+    //      vx = (random(0, 1)-0.5)*1.5;
+    //      vy = (random(0, 1)-0.45)*1.5;
+    //      len = int(abs(vx)+1 * 10);
+    //    }
 
-//    print("vy: ");
-//    print(vy);
-//    print(" len: ");
-//    print(len);
+    //print("vx: "+vx+" vy: "+vy+" len: "+len);
 
-    dx = int(random(2*displayWidth, 10*displayWidth));
-    dy = int(random(2*displayHeight, 5*displayHeight));
-//    print(" dx: ");
-//    print(dx);
-//    print(" dy: ");
-//    println(dy);
+    dx = int(random(0*displayWidth, 4*displayWidth));
+    dy = int(random(0*displayHeight, 2*displayHeight));
+    //println(" dx: "+dx+" dy: "+dy);
   }
 
   public void draw() {

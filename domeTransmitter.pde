@@ -5,7 +5,8 @@ import hypermedia.net.*;
 import java.io.*;
 
 // This should be 127.0.0.1, 58802
-String transmit_address = "127.0.0.1";
+//String transmit_address = "127.0.0.1";
+String transmit_address = "172.16.16.52";
 int transmit_port       = 58082;
 
 
@@ -55,17 +56,17 @@ int[] varMax = {
 Routine[] enabledRoutines = new Routine[] {
   new WarpSpeedMrSulu(), 
   //new Warp(new WarpSpeedMrSulu(), false, false, 0.5, 0.5), 
-  new RGBRoutine(), 
-  //new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
+  //new RGBRoutine(), 
+  new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
   //new RainbowColors(), 
   new Warp(new RainbowColors(), true, true, 0.5, 0.5), 
   new Warp(null, true, false, 0.5, 0.5), 
   new Waves(), 
   new ColorDrop(), 
   new Bursts(), 
-  new Chase(), 
+  //new Chase(), 
   //new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
-  new Greetz(), 
+  //new Greetz(), 
   //new DropTheBomb(), 
   //new Fire(), 
   //new FFTDemo(),
@@ -178,7 +179,7 @@ void handleInput(String s) {
           switching_mode = true;
         }
         else if (/*('0' <= s.charAt(1)) && (s.charAt(1) <='9') &&*/ (int(s.substring(1)) < enabledRoutines.length) && !switching_mode) {
-          println("int: "+int(s.substring(1)));
+          //println("int: "+int(s.substring(1)));
           if (mode != (s.charAt(1)-'0')) {
             mode = s.charAt(1)-'0';
             newMode(mode);
@@ -191,17 +192,41 @@ void handleInput(String s) {
       }
       break;
 
+    case 'b':  // button pressed
+      if (s.length() > 1) {
+        char buttonID = s.charAt(1);
+        switch (buttonID) {
+        case '0':
+          // do something
+          break;
+        case '1':
+          // do something
+          if (!switching_mode) {
+            newMode();
+            switching_mode = true;
+          }
+          break;
+        case '2':
+          // do something
+          break;
+        default:
+          // complain
+          break;
+        }
+      }
+      break;
+
     case 'v': // set parameter
       if (s.length() > 9) {
         if (s.substring(0, 3).equals("var")) { // setting a variable
           int varID = int(s.substring(3, 4));
 
           if (s.substring(4, 7).equals("max")) {
-            println("var"+varID+" max: "+s.substring(7, 10));
+            //println("var"+varID+" max: "+s.substring(7, 10));
             varMax[varID] = int(s.substring(7, 10));
           }
           else if (s.substring(4, 7).equals("min")) {
-            println("var"+varID+" min: "+s.substring(7, 10));
+            //println("var"+varID+" min: "+s.substring(7, 10));
             varMin[varID] = int(s.substring(7, 10));
           }
         }
@@ -237,7 +262,7 @@ void serialEvent(Serial ctrlPort) {
     // Removes whitespace before and after string
     inString = trim(inString);
     // validate and parse string
-    println("from SP: " + inString);
+    //println("from SP: " + inString);
     handleInput(inString);
   }
 }

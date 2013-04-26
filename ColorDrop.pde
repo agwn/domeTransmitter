@@ -11,12 +11,11 @@ class ColorDrop extends Routine {
 
 
     for (int col = 0; col < displayWidth; col++) {
-      float phase = sin((float)((col+frame*frame_mult)%displayWidth)/displayWidth*3.146 + random(0, .01));
+      float phase = sin((float)((col+frame*frame_mult)%displayWidth)/displayWidth*PI + random(0, .01));
 
       float r = 0;
       float g = 0;
       float b = 0;
-
 
       if ((col+frame*frame_mult)%(3*displayWidth) < displayWidth) {
         r = random(varMax[0])*phase;

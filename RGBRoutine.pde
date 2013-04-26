@@ -15,7 +15,7 @@ class RGBRoutine extends Routine {
       }
     }
 
-    color_angle = (color_angle+1);//%255;
+    color_angle = (color_angle+1)%255;
 
 
     long frame = frameCount - modeFrameStart;
