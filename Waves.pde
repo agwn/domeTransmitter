@@ -47,7 +47,7 @@ class Wave {
     init();
 
     g = createGraphics(displayWidth, displayHeight, P2D);
-  }
+}
 
   public void init() {
     r = random(TWO_PI);
@@ -60,7 +60,7 @@ class Wave {
       s = -s;
     }
 
-    c = color(random(rMin,rMax), random(gMin,gMax), random(bMin,bMax));
+    c = color(random(varMax[0]), random(varMax[1]), random(varMax[2]));
     /*
     // naim hack (PORNJ Pink: RGB 252/23/218)
     if (random(0, 2) > 1) {
@@ -72,7 +72,7 @@ class Wave {
       c = color(int(random(230, 255)), int(random(160, 180)), int(random(0, 1)));
     }
     */
-  }
+}
 
   public void draw() {
     float step;

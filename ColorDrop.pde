@@ -19,19 +19,19 @@ class ColorDrop extends Routine {
 
 
       if ((col+frame*frame_mult)%(3*displayWidth) < displayWidth) {
-        r = random(255)*phase;
-        g = random(128);
-        b = random(128);
+        r = random(varMax[0])*phase;
+        g = random(varMin[1]);
+        b = random(varMin[2]);
       }
       else if ((col+frame*frame_mult)%(3*displayWidth) < displayWidth*2) {
-        r = random(128);
-        g = random(255)*phase;
-        b = random(128);
+        r = random(varMin[0]);
+        g = random(varMax[1])*phase;
+        b = random(varMin[2]);
       }
       else {
-        r = random(128);
-        g = random(128);
-        b = random(255)*phase;
+        r = random(varMin[0]);
+        g = random(varMin[1]);
+        b = random(varMax[2])*phase;
       }
 
       stroke(r, g, b);

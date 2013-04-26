@@ -24,25 +24,6 @@ Routine backupRoutine = null;
 
 //WiiController controller;
 
-Routine[] enabledRoutines = new Routine[] {
-  new WarpSpeedMrSulu(), 
-  new Warp(new WarpSpeedMrSulu(), false, false, 0.5, 0.5), 
-  //new RGBRoutine(), 
-  new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
-  //new RainbowColors(), 
-  new Warp(new RainbowColors(), true, true, 0.5, 0.5), 
-  new Warp(null, true, false, 0.5, 0.5), 
-  new Waves(), 
-  //denew DropTheBomb(), 
-  //new Fire(), 
-  new ColorDrop(), 
-  //new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
-  new Bursts(), 
-  //new Greetz(), 
-  //new Chase(), 
-  //new FFTDemo(),
-};
-
 int w = 0;
 int x = displayWidth;
 PFont font;
@@ -63,16 +44,34 @@ int fadeOutFrames = 0;
 int fadeInFrames = 0;
 
 Serial ctrlPort;
-String input = "";
 String kbdInput = "";
-int lf = 10; // ASCII linefeed
+int lf = int('\n'); // ASCII linefeed
 
-int rMin = 128;
-int rMax = 255;
-int gMin = 128;
-int gMax = 255;
-int bMin = 128;
-int bMax = 255;
+int[] varMin = {
+  64, 64, 64
+};
+int[] varMax = {
+  128, 128, 128
+};
+
+Routine[] enabledRoutines = new Routine[] {
+  new WarpSpeedMrSulu(), 
+  //new Warp(new WarpSpeedMrSulu(), false, false, 0.5, 0.5), 
+  new RGBRoutine(), 
+  //new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
+  //new RainbowColors(), 
+  new Warp(new RainbowColors(), true, true, 0.5, 0.5), 
+  new Warp(null, true, false, 0.5, 0.5), 
+  new Waves(), 
+  new ColorDrop(), 
+  new Bursts(), 
+  new Chase(), 
+  //new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
+  new Greetz(), 
+  //new DropTheBomb(), 
+  //new Fire(), 
+  //new FFTDemo(),
+};
 
 
 void setup() {
@@ -91,18 +90,16 @@ void setup() {
   delay(20);
   println("Serial Ports List:");
   println(list);
-  // List all the available serial ports:
-  println(Serial.list());
 
   // The first serial port on my mac is the Arduino so I just open that.
   // Consult the output of println(Serial.list()); to figure out which you
   // should be using.
   if (Serial.list().length > 0) {
-    ctrlPort = new Serial(this, Serial.list()[0], 115200);
-    //ctrlPort = new Serial(this, "COM46", 115200);
+    //ctrlPort = new Serial(this, Serial.list()[0], 38400);
+    ctrlPort = new Serial(this, "COM51", 38400);
 
     // Fire a serialEvent() when when a linefeed comes in to the serial port.
-    ctrlPort.bufferUntil(lf);
+    ctrlPort.bufferUntil('\n');
     ctrlPort.write(lf);
   }
 
@@ -171,74 +168,53 @@ void newMode(int mode) {
 }
 
 void handleInput(String s) {
-  //print("received: " + s);
-  // validate and process input
-  switch (s.charAt(0)) {
-  case 'm': // mode change
-    // mode change
-    if ('c' == s.charAt(1) && !switching_mode) {
-      newMode();
-      switching_mode = true;
+  // Removes whitespace before and after string
+  s = trim(s);
+  //println("received: "+s+" len: "+s.length());
+  if (s.length() > 0) {
+    // validate and process input
+    switch (s.charAt(0)) {
+    case 'm': // mode change
+      if (s.length() > 1) {
+        // mode change
+        if ('c' == s.charAt(1) && !switching_mode) {
+          newMode();
+          switching_mode = true;
+        }
+        else if (/*('0' <= s.charAt(1)) && (s.charAt(1) <='9') &&*/ (int(s.substring(1)) < enabledRoutines.length) && !switching_mode) {
+          println("int: "+int(s.substring(1)));
+          if (mode != (s.charAt(1)-'0')) {
+            mode = s.charAt(1)-'0';
+            newMode(mode);
+            switching_mode = true;
+          } // else already in that mode
+        }
+        else {
+          println("Invalid mode selected");
+        }
+      }
+      break;
+
+    case 'v': // set parameter
+      if (s.length() > 9) {
+        if (s.substring(0, 3).equals("var")) { // setting a variable
+          int varID = int(s.substring(3, 4));
+
+          if (s.substring(4, 7).equals("max")) {
+            println("var"+varID+" max: "+s.substring(7, 10));
+            varMax[varID] = int(s.substring(7, 10));
+          }
+          else if (s.substring(4, 7).equals("min")) {
+            println("var"+varID+" min: "+s.substring(7, 10));
+            varMin[varID] = int(s.substring(7, 10));
+          }
+        }
+      }
+      break;
+    default:
+      println("Invalid command!");
+      break;
     }
-    else if (/*('0' <= s.charAt(1)) && (s.charAt(1) <='9') &&*/ (int(s.substring(1)) < enabledRoutines.length) && !switching_mode) {
-      println("int: "+int(s.substring(1)));
-      if (mode != (s.charAt(1)-'0')) {
-        mode = s.charAt(1)-'0';
-        newMode(mode);
-        switching_mode = true;
-      } // else already in that mode
-    }
-    else {
-      println("Invalid mode selected");
-    }
-    break;
-  case 'c':  // color change
-    break;
-  case 'r':  // set red value
-    if (s.length() > 3) {
-      print("set rMin: ");
-      println(s.substring(1, 4));
-      rMin = int(s.substring(1, 4));
-    }
-    break;
-  case 'g':  // set green value
-    if (s.length() > 3) {
-      print("set gMin; ");
-      println(s.substring(1, 4));
-      gMin = int(s.substring(1, 4));
-    }
-    break;
-  case 'b':  // set blue value
-    if (s.length() > 3) {
-      print("set bMin: ");
-      println(s.substring(1, 4));
-      bMin = int(s.substring(1, 4));
-    }
-    break;
-  case 'R':  // set red value
-    if (s.length() > 3) {
-      print("set rMax: ");
-      println(s.substring(1, 4));
-      rMax = int(s.substring(1, 4));
-    }
-    break;
-  case 'G':  // set green value
-    if (s.length() > 3) {
-      print("set gMax: ");
-      println(s.substring(1, 4));
-      gMax = int(s.substring(1, 4));
-    }
-    break;
-  case 'B':  // set blue value
-    if (s.length() > 3) {
-      print("set bMax: ");
-      println(s.substring(1, 4));
-      bMax = int(s.substring(1, 4));
-    }
-    break;
-  default:
-    println("Invalid command!");
-    break;
   }
 }
 
@@ -248,7 +224,7 @@ void keyPressed() {
   if (key < 255) {
     kbdInput += str(key);
     if (key == lf) {
-      print("rcvd from KB: " + kbdInput);
+      print("from KB: " + kbdInput);
       handleInput(kbdInput);
 
       kbdInput = "";
@@ -258,11 +234,16 @@ void keyPressed() {
 
 
 // Process a line of text from the serial port.
-void serialEvent(Serial p) {
-  input = ctrlPort.readString();
-  // validate and parse string
-  print("rcvd from SP: " + input);
-  handleInput(input);
+void serialEvent(Serial ctrlPort) {
+  // Reads input until it receives a new line character
+  String inString = ctrlPort.readStringUntil('\n');
+  if (inString != null) {
+    // Removes whitespace before and after string
+    inString = trim(inString);
+    // validate and parse string
+    println("from SP: " + inString);
+    handleInput(inString);
+  }
 }
 
 
@@ -270,27 +251,9 @@ boolean switching_mode = false; // if true, we already switched modes, so don't 
 int seizure_count = 10;  // Only let seizure mode work for a short time.
 
 void draw() {
-
-  //if (!controller.buttonB) {
   // should test if mode switch is actually done?
   switching_mode = false;
-  //}
-  /*
-  if (controller.buttonA) {
-   seizure_count += 1;
-   }
-   else {
-   seizure_count = 0;
-   }
-   
-   // Jump into seizure mode
-   if ((controller.buttonA || (keyPressed && key == 'a')) && currentRoutine != drop && seizure_count == 1) {
-   drop.draw();
-   backupRoutine = currentRoutine;
-   currentRoutine = drop;
-   drop.reset();
-   }
-   */
+
   if (fadeOutFrames > 0) {
     fadeOutFrames--;
     blend(fadeLayer, 0, 0, displayWidth, displayHeight, 0, 0, displayWidth, displayHeight, MULTIPLY);
@@ -316,7 +279,6 @@ void draw() {
     currentRoutine.isDone = false;
     //newMode();
   }
-  //}
 
   sign.sendData();
 }

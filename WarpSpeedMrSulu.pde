@@ -54,9 +54,9 @@ class WarpStar {
     //r = random(64, 255);
     //g = random(64, 255);
     //b = random(64, 255);
-    r = random(rMin, rMax);
-    g = random(gMin, gMax);
-    b = random(bMin, bMax);
+    r = random(varMin[0], varMax[0]);
+    g = random(varMin[1], varMax[1]);
+    b = random(varMin[2], varMax[2]);
     // scale brightness.
     float bright = random(.5, 2);
     r = r*bright;

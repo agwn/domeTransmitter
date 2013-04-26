@@ -55,9 +55,9 @@ class Burst {
     //r = random(255);
     //g = random(255);
     //b = random(255);
-    r = random(rMin, rMax);
-    g = random(gMin, gMax);
-    b = random(bMin, bMax);
+    r = random(varMin[0], varMax[0]);
+    g = random(varMin[1], varMax[1]);
+    b = random(varMin[2], varMax[2]);
 
     x = random(displayWidth);
     y = random(displayHeight);

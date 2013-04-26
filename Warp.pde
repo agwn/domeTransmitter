@@ -62,7 +62,7 @@ class Warp extends Routine {
       noFill();
       ellipseMode(RADIUS);
       for (int i=0; i<10; i++) {
-        stroke(i%2==0 ? color(255, 64, 64) : color(255, 128, 0));
+        stroke(i%2==0 ? color(varMin[0], varMin[1], varMin[2]) : color(varMax[0], varMax[1], varMax[2]));
         ellipse(displayWidth/2, displayHeight/2, i*(displayWidth/10), i*(displayHeight/10));
       }
     }
