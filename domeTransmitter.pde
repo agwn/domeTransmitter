@@ -22,8 +22,6 @@ float bright = 0.5;  // Global brightness modifier
 Routine drop = new Seizure();
 Routine backupRoutine = null;
 
-//WiiController controller;
-
 int w = 0;
 int x = displayWidth;
 PFont font;
@@ -102,8 +100,6 @@ void setup() {
     ctrlPort.bufferUntil('\n');
     ctrlPort.write(lf);
   }
-
-  //controller = new WiiController();
 
   for (Routine r : enabledRoutines) {
     r.setup(this);
