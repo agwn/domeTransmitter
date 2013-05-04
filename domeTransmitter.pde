@@ -5,8 +5,8 @@ import hypermedia.net.*;
 import java.io.*;
 
 // This should be 127.0.0.1, 58802
-//String transmit_address = "127.0.0.1";
-String transmit_address = "172.16.16.52";
+String transmit_address = "127.0.0.1";
+//String transmit_address = "192.168.111.23";
 int transmit_port       = 58082;
 
 
@@ -47,24 +47,26 @@ String kbdInput = "";
 int lf = int('\n'); // ASCII linefeed
 
 int[] varMin = {
-  64, 64, 64
+  192, 192, 192
 };
 int[] varMax = {
-  128, 128, 128
+  255, 255, 255
 };
 
 Routine[] enabledRoutines = new Routine[] {
   new WarpSpeedMrSulu(), 
-  //new Warp(new WarpSpeedMrSulu(), false, false, 0.5, 0.5), 
   //new RGBRoutine(), 
   new Warp(new RGBRoutine(), true, true, 0.5, 0.5), 
   //new RainbowColors(), 
   new Warp(new RainbowColors(), true, true, 0.5, 0.5), 
   new Warp(null, true, false, 0.5, 0.5), 
   new Waves(), 
-  new ColorDrop(), 
-  new Bursts(), 
+  //new ColorDrop(), 
+  new Warp(new ColorDrop(), true, true, 0.5, 0.5), 
+  //new Bursts(),
+  new Warp(new Bursts(), true, true, 0.5, 0.5), 
   //new Chase(), 
+  new Warp(new Chase(), true, true, 0.5, 0.5), 
   //new Animator("anim-nyancat", 1, .5, 0, 0, 0), 
   //new Greetz(), 
   //new DropTheBomb(), 
@@ -74,7 +76,7 @@ Routine[] enabledRoutines = new Routine[] {
 
 
 void setup() {
-  size(displayWidth, displayHeight, P2D);
+  size(displayWidth, displayHeight);
 
   frameRate(FRAMERATE);
 
@@ -110,7 +112,7 @@ void setup() {
 }
 
 void setFadeLayer(int g) {
-  fadeLayer = createGraphics(displayWidth, displayHeight, P2D);
+  fadeLayer = createGraphics(displayWidth, displayHeight);
   fadeLayer.beginDraw();
   fadeLayer.stroke(g);
   fadeLayer.fill(g);
