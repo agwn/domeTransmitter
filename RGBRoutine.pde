@@ -3,6 +3,7 @@ class RGBRoutine extends Routine {
 
   void draw() {
     background(0);
+    noSmooth();
 
     for (int row = 0; row < displayHeight; row++) {
       for (int col = 0; col < displayWidth; col++) {

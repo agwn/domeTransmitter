@@ -1,5 +1,5 @@
 class WarpSpeedMrSulu extends Routine {
-  int NUM_STARS = 50;
+  int NUM_STARS = 70;
   WarpStar[] warpstars;
 
   void setup(PApplet parent) {
@@ -51,9 +51,9 @@ class WarpStar {
     //r = int(map(y, 0, displayHeight, 0, 255));
     //g = 0;
     //b = 0;
-    r = random(varMax[0]);
-    g = random(varMax[1]);
-    b = random(varMax[2]);
+    r = random(varMin[0], varMax[0]);
+    g = random(varMin[1], varMax[1]);
+    b = random(varMin[2], varMax[2]);
 
     // select color from hsv color space
     //float tm = random(map(varMin[0],0,255,0,TWO_PI),map(varMax[0],0,255,0,TWO_PI));
@@ -63,41 +63,41 @@ class WarpStar {
 
     // scale brightness.
     float bright = random(.5, 2);
-    r = r*bright;
-    g = g*bright;
-    b = b*bright;
+    r = constrain(bright*((long)r), 0, 255);
+    g = constrain(bright*((long)g), 0, 255);
+    b = constrain(bright*((long)b), 0, 255);
 
     y = int(random(0, displayHeight));
 
     //float typeThresh = map((varMin[1]+varMax[1])/2.0, 0, 255, 0, 1);
     //float vdir = map ((varMin[2]+varMax[2])/2.0, 0, 255, -2, 2);
 
-    if (random(0, 1) > 0.4/*typeThresh*/) {
+    if (random(0, 1) > 0.5/*typeThresh*/) {
       x = int(random(0, displayWidth));
-      vx = (random(0, 1)-0.5)*1.5;
+      vx = (random(0, 1)-0.55)*2;
       vy = 0;
       len = int((abs(vx)+1) * 10);
     }
     else {
       x = int(random(0, displayWidth));
       vx = 0;
-      vy = (random(0, 1)-0.5/*vdir*/)*1.5;
+      vy = (random(0, 1)-0.5/*vdir*/)*1.7;
       len = int((abs(vy)+1) * 10);
     }
 
-    //    // override values for testing
-    //    if (true) {
-    //      x = int(random(0, displayWidth));
-    //      vx = (random(0, 1)-0.5)*1.5;
-    //      vy = (random(0, 1)-0.45)*1.5;
-    //      len = int(abs(vx)+1 * 10);
-    //    }
-
-    //print("vx: "+vx+" vy: "+vy+" len: "+len);
+    // override values for testing
+    if (false) {
+      x = int(random(0, displayWidth));
+      vx = (random(0, 1)-0.5)*1.5;
+      vy = (random(0, 1)-0.45)*1.5;
+      //vx = 0;
+      //vy = 0;
+      len = int((abs(vx)+1) * 10);
+    }
 
     dx = int(random(0*displayWidth, 4*displayWidth));
     dy = int(random(0*displayHeight, 2*displayHeight));
-    //println(" dx: "+dx+" dy: "+dy);
+    //println("x: "+x+" vx: "+vx+" vy: "+vy+" len: "+len+" dx: "+dx+" dy: "+dy);
   }
 
   public void draw() {
@@ -119,18 +119,21 @@ class WarpStar {
 
       stroke(r, g, b);
 
+      noSmooth();
       point(x, y);
 
-      _x = x;
-      _y = y;
+      _x = int(x);
+      _y = int(y);
       for (int i=1; i<len; i++) {
-        _r = int(0.90*r);
-        _g = int(0.90*g);
-        _b = int(0.90*b);
+        float scaler = pow(0.95, i);
+
+        _r = int(scaler*r);
+        _g = int(scaler*g);
+        _b = int(scaler*b);
         stroke(color(_r, _g, _b));
 
-        _x = (x-(i*vx));
-        _y = (y-(i*vy));
+        _x = int(x-(i*vx));
+        _y = int(y-(i*vy));
 
         if (_x < 0) _x += displayWidth;
         if (_x > displayWidth) _x -= displayWidth;
