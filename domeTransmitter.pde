@@ -76,7 +76,7 @@ Routine[] enabledRoutines = new Routine[] {
 
 
 void setup() {
-  size(displayWidth, displayHeight);
+  size(displayWidth+100, displayHeight+100);
 
   frameRate(FRAMERATE);
 
