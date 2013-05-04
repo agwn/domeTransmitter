@@ -49,12 +49,9 @@ class Burst {
 
   public void reset()
   {
-    //r = random(255-32)+32;
-    //g = random(255-32)+32;
-    //b = random(255-32)+32;
-    //r = random(255);
-    //g = random(255);
-    //b = random(255);
+    r = random(255-32)+32;
+    g = random(255-32)+32;
+    b = random(255-32)+32;
     r = random(varMin[0], varMax[0]);
     g = random(varMin[1], varMax[1]);
     b = random(varMin[2], varMax[2]);
@@ -63,8 +60,8 @@ class Burst {
     y = random(displayHeight);
 
     float max_speed = .25;
-    xv = random(max_speed) - max_speed/2;
-    yv = random(max_speed) - max_speed/2;
+    xv = random(max_speed) - max_speed/2.0;
+    yv = (32/60.0)*(random(max_speed) - max_speed/2.0);
 
     maxd = random(20);
     speed = random(5)/10 + 0.1;

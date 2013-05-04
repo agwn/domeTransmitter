@@ -47,32 +47,33 @@ class Wave {
     init();
 
     g = createGraphics(displayWidth, displayHeight);
-}
+  }
 
   public void init() {
     r = random(TWO_PI);
-    f = 2*PI/40;
-    a = displayWidth/6 + random(displayWidth/4);
-    y = displayWidth/16 + int(random(displayWidth - displayWidth/16));
-    s = PI/128 + random(PI/16);
+    f = 2*PI/40.0;
+    a = displayWidth/6.0 + random(displayWidth/4.0);
+    y = int(displayWidth/16.0) + int(random(displayWidth - displayWidth/16.0));
+    s = PI/128.0 - random(PI/16.0);
 
     if (random(10)<5) {
       s = -s;
     }
-
-    c = color(random(varMax[0]), random(varMax[1]), random(varMax[2]));
-    /*
-    // naim hack (PORNJ Pink: RGB 252/23/218)
-    if (random(0, 2) > 1) {
-      // pink
-      c = color(int(random(220, 255)), int(random(0, 55)), int(random(210, 230)));
+    if (true) {
+      c = color(random(varMax[0]), random(varMax[1]), random(varMax[2]));
     }
     else {
-      // orange
-      c = color(int(random(230, 255)), int(random(160, 180)), int(random(0, 1)));
+      // naim hack (PORNJ Pink: RGB 252/23/218)
+      if (random(0, 2) > 1) {
+        // pink
+        c = color(int(random(220, 255)), int(random(0, 55)), int(random(210, 230)));
+      }
+      else {
+        // orange
+        c = color(int(random(230, 255)), int(random(160, 180)), int(random(0, 1)));
+      }
     }
-    */
-}
+  }
 
   public void draw() {
     float step;
@@ -86,7 +87,7 @@ class Wave {
     g.beginDraw();
     g.background(0);
 
-    float bright_mult = .5 + (1+sin(step))/4;
+    float bright_mult = 0.5 + (1+sin(step))/4.0;
 
     g.stroke(color(red(c)*bright_mult, green(c)*bright_mult, blue(c)*bright_mult));
 

@@ -47,10 +47,10 @@ String kbdInput = "";
 int lf = int('\n'); // ASCII linefeed
 
 int[] varMin = {
-  192, 192, 192
+  64, 64, 64
 };
 int[] varMax = {
-  255, 255, 255
+  192, 192, 192
 };
 
 Routine[] enabledRoutines = new Routine[] {
