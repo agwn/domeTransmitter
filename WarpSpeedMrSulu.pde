@@ -84,6 +84,7 @@ class WarpStar {
       vy = (random(0, 1)-0.5/*vdir*/)*1.7;
       len = int((abs(vy)+1) * 10);
     }
+    
 
     // override values for testing
     if (false) {
@@ -98,6 +99,9 @@ class WarpStar {
     dx = int(random(0*displayWidth, 4*displayWidth));
     dy = int(random(0*displayHeight, 2*displayHeight));
     //println("x: "+x+" vx: "+vx+" vy: "+vy+" len: "+len+" dx: "+dx+" dy: "+dy);
+
+    //if (y > displayHeight) this.reset();
+    //if (x > displayWidth) this.reset();
   }
 
   public void draw() {

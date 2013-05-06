@@ -11,7 +11,8 @@ class RGBRoutine extends Routine {
         float g = (((row)*2 + 100.0*col/displayWidth + color_angle + 33)%100)*(varMax[1]/100.0);
         float b = (((row)*2 + 100.0*col/displayWidth + color_angle + 66)%100)*(varMax[2]/100.0);
 
-        stroke(r, g, b);
+        stroke(int(r), int(g), int(b));
+        //print("("+col+","+row+"):"+int(r)+","+int(g)+","+int(b)+" ");
         point(col, row);
       }
     }

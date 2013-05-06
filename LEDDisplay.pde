@@ -53,17 +53,17 @@ import hypermedia.net.*;
 
 static final short CIE8bit[] =
 {
-  0,2,5,7,10,12,15,17,20,22,25,27,29,32,34,37,39,41,43,46,48,50,52,55,57,59,61,63,66,68,70,72,
-  74,76,78,80,82,84,86,88,90,92,94,96,98,99,101,103,105,107,109,110,112,114,116,117,119,121,
-  122,124,126,127,129,131,132,134,135,137,139,140,142,143,145,146,148,149,150,152,153,155,156,
-  157,159,160,162,163,164,165,167,168,169,171,172,173,174,175,177,178,179,180,181,182,184,185,
-  186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,204,205,206,207,
-  208,209,210,210,211,212,213,214,214,215,216,217,217,218,219,220,220,221,222,222,223,224,224,
-  225,225,226,227,227,228,228,229,230,230,231,231,232,232,233,233,234,234,235,235,236,236,237,
-  237,238,238,238,239,239,240,240,241,241,241,242,242,242,243,243,243,244,244,244,245,245,245,
-  246,246,246,247,247,247,247,248,248,248,248,249,249,249,249,249,250,250,250,250,250,251,251,
-  251,251,251,252,252,252,252,252,252,252,253,253,253,253,253,253,253,253,254,254,254,254,254,
-  254,254,254,254,255,255,255,255,255,255,255,255,255,255
+  0, 2, 5, 7, 10, 12, 15, 17, 20, 22, 25, 27, 29, 32, 34, 37, 39, 41, 43, 46, 48, 50, 52, 55, 57, 59, 61, 63, 66, 68, 70, 72, 
+  74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 99, 101, 103, 105, 107, 109, 110, 112, 114, 116, 117, 119, 121, 
+  122, 124, 126, 127, 129, 131, 132, 134, 135, 137, 139, 140, 142, 143, 145, 146, 148, 149, 150, 152, 153, 155, 156, 
+  157, 159, 160, 162, 163, 164, 165, 167, 168, 169, 171, 172, 173, 174, 175, 177, 178, 179, 180, 181, 182, 184, 185, 
+  186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 204, 205, 206, 207, 
+  208, 209, 210, 210, 211, 212, 213, 214, 214, 215, 216, 217, 217, 218, 219, 220, 220, 221, 222, 222, 223, 224, 224, 
+  225, 225, 226, 227, 227, 228, 228, 229, 230, 230, 231, 231, 232, 232, 233, 233, 234, 234, 235, 235, 236, 236, 237, 
+  237, 238, 238, 238, 239, 239, 240, 240, 241, 241, 241, 242, 242, 242, 243, 243, 243, 244, 244, 244, 245, 245, 245, 
+  246, 246, 246, 247, 247, 247, 247, 248, 248, 248, 248, 249, 249, 249, 249, 249, 250, 250, 250, 250, 250, 251, 251, 
+  251, 251, 251, 252, 252, 252, 252, 252, 252, 252, 253, 253, 253, 253, 253, 253, 253, 253, 254, 254, 254, 254, 254, 
+  254, 254, 254, 254, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255
 };
 
 public class LEDDisplay {
@@ -85,7 +85,7 @@ public class LEDDisplay {
   int pixelsPerChannel;
   float gammaValue = 2.5;
   boolean enableGammaCorrection = false;
-  boolean enableCIECorrection = true;
+  boolean enableCIECorrection = false;
   boolean isRGB = false;
 
   public LEDDisplay(PApplet parent, int w, int h, boolean isRGB, String address, int port) {
@@ -98,7 +98,7 @@ public class LEDDisplay {
     this.isRGB = isRGB;
     int bufferSize = (isRGB ? 3 : 1)*(w*h)+1;
     buffer = new byte[bufferSize];
-    this.addressingMode = ADDRESSING_VERTICAL_NORMAL;
+    this.addressingMode = ADDRESSING_HORIZONTAL_NORMAL;
     // TODO Detect this based on VERTICAL (h/2) vs. HORIZONTAL (w/2)
     this.pixelsPerChannel = 8;
 
@@ -129,6 +129,10 @@ public class LEDDisplay {
 
   public void setEnableGammaCorrection(boolean enableGammaCorrection) {
     this.enableGammaCorrection = enableGammaCorrection;
+  }
+
+  public void setEnableCIECorrection(boolean enableCIECorrection) {
+    this.enableCIECorrection = enableCIECorrection;
   }
 
   private int getAddress(int x, int y) {
@@ -195,17 +199,12 @@ public class LEDDisplay {
     buffer[0] = 1;
     for (int y=0; y<h; y++) {
       for (int x=0; x<w; x++) {
+        int loc = getAddress(x, y);
 
         if (isRGB) {
           r = int(red(image.pixels[y*w+x]));
           g = int(green(image.pixels[y*w+x]));
           b = int(blue(image.pixels[y*w+x]));
-
-          if (enableGammaCorrection) {
-            r = (int)(Math.pow(r/256.0, this.gammaValue)*256*bright);
-            g = (int)(Math.pow(g/256.0, this.gammaValue)*256*bright);
-            b = (int)(Math.pow(b/256.0, this.gammaValue)*256*bright);
-          }
 
           if (enableCIECorrection) {
             r = (int)(CIE8bit[r]);
@@ -213,9 +212,16 @@ public class LEDDisplay {
             b = (int)(CIE8bit[b]);
           }
 
-          buffer[(getAddress(x, y)*3)+1] = byte(r);
-          buffer[(getAddress(x, y)*3)+2] = byte(g);
-          buffer[(getAddress(x, y)*3)+3] = byte(b);
+          if (enableGammaCorrection) {
+            r = (int)(Math.pow(r/256.0, this.gammaValue)*256*bright);
+            g = (int)(Math.pow(g/256.0, this.gammaValue)*256*bright);
+            b = (int)(Math.pow(b/256.0, this.gammaValue)*256*bright);
+          }
+
+
+          buffer[(loc*3)+1] = byte(r);
+          buffer[(loc*3)+2] = byte(g);
+          buffer[(loc*3)+3] = byte(b);
         }
         else {
           r = int(brightness(image.pixels[y*w+x]));
@@ -229,6 +235,7 @@ public class LEDDisplay {
       }
     }
     updatePixels();
+
     udp.send(buffer, address, port);
   }
 }

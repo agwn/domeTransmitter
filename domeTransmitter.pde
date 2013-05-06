@@ -15,10 +15,10 @@ int displayWidth = 60;
 int displayHeight = 32;
 
 boolean VERTICAL = false;
-int FRAMERATE = 20;
+int FRAMERATE = 10;
 int TYPICAL_MODE_TIME = 6000;
 
-float bright = 0.5;  // Global brightness modifier
+float bright = 1.0;  // Global brightness modifier
 
 Routine drop = new Seizure();
 Routine backupRoutine = null;
@@ -31,7 +31,6 @@ int ZOOM = 1;
 long modeFrameStart;
 int mode = 0;
 
-
 int direction = 1;
 int position = 0;
 Routine currentRoutine = null;
@@ -43,6 +42,7 @@ int fadeOutFrames = 0;
 int fadeInFrames = 0;
 
 Serial ctrlPort;
+
 String kbdInput = "";
 int lf = int('\n'); // ASCII linefeed
 
@@ -76,12 +76,13 @@ Routine[] enabledRoutines = new Routine[] {
 
 
 void setup() {
-  size(displayWidth+100, displayHeight+100);
+  size(displayWidth, displayHeight);
 
   frameRate(FRAMERATE);
 
-  sign = new LEDDisplay(this, displayWidth, displayHeight, true, transmit_address, transmit_port);
+  sign = new LEDDisplay(this, displayHeight, displayWidth, true, transmit_address, transmit_port);
   sign.setAddressingMode(LEDDisplay.ADDRESSING_HORIZONTAL_NORMAL);
+  sign.setEnableCIECorrection(true);
   sign.setEnableGammaCorrection(true);
 
   setMode(0);
@@ -96,14 +97,13 @@ void setup() {
   // Consult the output of println(Serial.list()); to figure out which you
   // should be using.
   if (Serial.list().length > 0) {
-    //ctrlPort = new Serial(this, Serial.list()[0], 38400);
-    ctrlPort = new Serial(this, "COM51", 38400);
+    ctrlPort = new Serial(this, Serial.list()[0], 38400);
+    //ctrlPort = new Serial(this, "COM51", 38400);
 
     // Fire a serialEvent() when when a linefeed comes in to the serial port.
     ctrlPort.bufferUntil('\n');
     ctrlPort.write(lf);
   }
-
   for (Routine r : enabledRoutines) {
     r.setup(this);
   }
