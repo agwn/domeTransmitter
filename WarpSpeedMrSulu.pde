@@ -74,7 +74,7 @@ class WarpStar {
 
     if (random(0, 1) > 0.5/*typeThresh*/) {
       x = int(random(0, displayWidth));
-      vx = (random(0, 1)-0.55)*2;
+      vx = (random(0, 1)-0.55)*(1.7*0.01*(displayWidth-x));
       vy = 0;
       len = int((abs(vx)+1) * 10);
     }
@@ -129,7 +129,7 @@ class WarpStar {
       _x = int(x);
       _y = int(y);
       for (int i=1; i<len; i++) {
-        float scaler = pow(0.95, i);
+        float scaler = pow(0.90, i);
 
         _r = int(scaler*r);
         _g = int(scaler*g);
