@@ -14,7 +14,7 @@ class Fire extends Routine {
     //  size(640, 360, P2D);
 
     // Create buffered image for 3d cube
-    pg = createGraphics(displayWidth, displayHeight);
+    pg = createGraphics(displayWidth, displayHeight, P2D);
 
     calc1 = new int[displayWidth];
     calc3 = new int[displayWidth];

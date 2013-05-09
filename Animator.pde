@@ -59,7 +59,7 @@ class Animation {
 
   Animation(String _name, int _frameDivider) {
 
-    canvas = createGraphics(width, height);
+    canvas = createGraphics(width, height, P2D);
     frameNumber = 0;
     frameDivider = _frameDivider;
     load(_name);

@@ -5,8 +5,8 @@ import hypermedia.net.*;
 import java.io.*;
 
 // This should be 127.0.0.1, 58802
-String transmit_address = "127.0.0.1";
-//String transmit_address = "192.168.111.23";
+//String transmit_address = "127.0.0.1";
+String transmit_address = "172.16.16.52";
 int transmit_port       = 58082;
 
 
@@ -15,10 +15,10 @@ int displayWidth = 60;
 int displayHeight = 32;
 
 boolean VERTICAL = false;
-int FRAMERATE = 10;
+int FRAMERATE = 20;
 int TYPICAL_MODE_TIME = 6000;
 
-float bright = 1.0;  // Global brightness modifier
+float bright = 0.25;  // Global brightness modifier
 
 Routine drop = new Seizure();
 Routine backupRoutine = null;
@@ -112,7 +112,7 @@ void setup() {
 }
 
 void setFadeLayer(int g) {
-  fadeLayer = createGraphics(displayWidth, displayHeight);
+  fadeLayer = createGraphics(displayWidth, displayHeight, P2D);
   fadeLayer.beginDraw();
   fadeLayer.stroke(g);
   fadeLayer.fill(g);
